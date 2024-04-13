@@ -8,6 +8,7 @@ from langchain.chat_models import ChatOpenAI
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
 
+OPENAI_API_KEY= "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"
 
 def extract_text_from_pdfs(pdf_docs):
     text = ''
