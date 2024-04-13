@@ -6,7 +6,8 @@ from langchain.vectorstores import FAISS
 from langchain.chat_models import ChatOpenAI
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
-OPENAI_API_KEY= "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"
+
+OPENAI_API_KEY= "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"
 
 
 def extract_text_from_pdfs(pdf_docs):
@@ -23,19 +24,19 @@ def split_text_into_chunks(raw_text):
     chunks = text_splitter.split_text(raw_text)
     return chunks
 
-
 def create_vectorstore(text_chunks):
-    embeddings = OpenAIEmbeddings(api_key=OPENAI_API_KEY)  # Passing the API key here
+    embeddings = OpenAIEmbeddings(api_key=OPENAI_API_KEY)  # Pass the API key here
     vectorstore = FAISS.from_texts(texts=text_chunks, embedding=embeddings)
     return vectorstore
 
 
 def initialize_conversation_chain(vectorstore):
-    llm = ChatOpenAI()
+    # Ensure that the API key is passed to the ChatOpenAI class
+    llm = ChatOpenAI(api_key=OPENAI_API_KEY)
     memory = ConversationBufferMemory(memory_key='chat_history', return_messages=True)
-    conversation_chain = ConversationalRetrievalChain.from_llm(llm=llm, retriever=vectorstore.as_retriever(),
-                                                               memory=memory)
+    conversation_chain = ConversationalRetrievalChain.from_llm(llm=llm, retriever=vectorstore.as_retriever(), memory=memory)
     return conversation_chain
+
 
 
 def handle_user_input(user_question):
@@ -44,7 +45,6 @@ def handle_user_input(user_question):
 
 
 def main():
-
     st.set_page_config(page_title='InsightVault', page_icon=":books:", layout='wide')
 
     if "insight_vault_conversation" not in st.session_state:
